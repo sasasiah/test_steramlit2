@@ -20,11 +20,13 @@ def get_weather(city_name):
         if response.status_code == 200:
             # Extract and format weather information
             weather_description = data["weather"][0]["description"]
+            icon = data["weather"][0]["icon"]
             temperature = data["main"]["temp"]
             humidity = data["main"]["humidity"]
 
             return {
                 "description": weather_description,
+                "icon": icon,
                 "temperature": temperature - 273.15,  # Convert from Kelvin to Celsius
                 "humidity": humidity,
             }
@@ -46,18 +48,14 @@ weather_icons = {
     "mist": "🌫️"
 }
 
-# Display weather information with larger font
+# Display weather information
 if st.button("Get Weather"):
     weather_data = get_weather(city_name)
 
     if weather_data is not None:
         st.subheader(f"Weather in {city_name}:")
-
-        # Larger font size using Markdown <h1> tag
-        st.write(f"**<h1>Description:</h1>** {weather_data['description']} {weather_icons.get(weather_data['description'], '')}")
-
-        # Slightly smaller font size using Markdown <h2> tag
-        st.write(f"**<h2>Temperature:</h2>** **{weather_data['temperature']:.2f}°C**")
-        st.write(f"**<h2>Humidity:</h2>** **{weather_data['humidity']}%**")
+        st.write(f"**Description:** {weather_data['description']} {weather_icons.get(weather_data['description'], '')}")
+        st.write(f"**Temperature:** **{weather_data['temperature']:.2f}°C**")
+        st.write(f"**Humidity:** **{weather_data['humidity']}%**")
     else:
         st.warning("Weather data not available for the specified city. Please check the city name or try again later.")
