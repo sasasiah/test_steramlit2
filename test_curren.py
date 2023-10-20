@@ -4,13 +4,13 @@ import requests
 # Set a title
 st.title("Currency Converter")
 
-# Define a list of currencies and their symbols
+# Define a list of currencies and their symbols (as emojis)
 currencies = {
-    "USD": "$",
-    "EUR": "€",
-    "GBP": "£",
-    "JPY": "¥",
-    "AUD": "A$",
+    "USD": {"emoji": "💵", "name": "สกุลเงินสหรัฐอเมริกา", '$'},
+    "EUR": {"emoji": "💶", "name": "สกุลเงินยูโร"},
+    "GBP": {"emoji": "💷", "name": "สกุลเงินปอนด์"},
+    "JPY": {"emoji": "💴", "name": "สกุลเงินเยนญี่ปุ่น"},
+    "AUD": {"emoji": "💰", "name": "สกุลเงินดอลลาร์ออสเตรเลีย"},
 }
 
 # User input: amount and source currency
@@ -43,6 +43,7 @@ if st.button("Convert"):
     converted_amount = convert_currency(amount, source_currency, target_currency)
 
     if converted_amount is not None:
-        st.write(f"{currencies[source_currency]} {amount} {source_currency} is equal to {currencies[target_currency]} {converted_amount} {target_currency}")
+        st.subheader("Conversion Result:")
+        st.write(f"{currencies[source_currency]['emoji']} {amount} {source_currency} ({currencies[source_currency]['name']}) is equal to {currencies[target_currency]['emoji']} {converted_amount} {target_currency} ({currencies[target_currency]['name']})")
     else:
         st.warning("Currency conversion failed. Please try again.")
