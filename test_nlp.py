@@ -1,13 +1,17 @@
 import streamlit as st
 import spacy
-from textblob import TextBlob
 
-# Load the spaCy English language model
-nlp = spacy.load("en_core_web_sm")
+# Check if the spaCy model is already installed, and if not, download it.
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    st.warning("Downloading spaCy model. This may take a while.")
+    spacy.cli.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 # Set a title and a subtitle
 st.title("NLP Text Analysis")
-st.subheader("Analyze text with spaCy and TextBlob")
+st.subheader("Analyze text with spaCy")
 
 # Create a textarea for user input
 text = st.text_area("Enter text for analysis", "")
