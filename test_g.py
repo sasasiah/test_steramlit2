@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 #import plotly.express as px
-from transformers import pipeline
+#from transformers import pipeline
 # Set a title for your Streamlit app
 st.title("Animated 2D Line Chart from CSV")
 
