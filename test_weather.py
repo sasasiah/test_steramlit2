@@ -47,15 +47,26 @@ weather_icons = {
     "snow": "❄️",
     "mist": "🌫️"
 }
-
-# Display weather information
+# Display weather information with larger font
 if st.button("Get Weather"):
     weather_data = get_weather(city_name)
 
     if weather_data is not None:
         st.subheader(f"Weather in {city_name}:")
-        st.write(f"**Description:** {weather_data['description']} {weather_icons.get(weather_data['description'], '')}")
-        st.write(f"**Temperature:** **{weather_data['temperature']:.2f}°C**")
-        st.write(f"**Humidity:** **{weather_data['humidity']}%**")
+
+        # Larger font size using Markdown <h1> tag
+        st.write(f"**<h1>Description:</h1>** {weather_data['description']} {weather_icons.get(weather_data['description'], '')}")
+
+        # Slightly smaller font size using Markdown <h2> tag
+        st.write(f"**<h2>Temperature:</h2>** **{weather_data['temperature']:.2f}°C**")
+        st.write(f"**<h2>Humidity:</h2>** **{weather_data['humidity']}%**")
     else:
         st.warning("Weather data not available for the specified city. Please check the city name or try again later.")
+
+
+
+
+
+
+
+
