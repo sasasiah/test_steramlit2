@@ -1,12 +1,13 @@
 import streamlit as st
 import spacy
+from textblob import TextBlob
 
 # Load the spaCy English language model
 nlp = spacy.load("en_core_web_sm")
 
 # Set a title and a subtitle
 st.title("NLP Text Analysis")
-st.subheader("Analyze text with spaCy")
+st.subheader("Analyze text with spaCy and TextBlob")
 
 # Create a textarea for user input
 text = st.text_area("Enter text for analysis", "")
@@ -34,3 +35,19 @@ if text:
     st.subheader("Syntactic Dependencies")
     for token in doc:
         st.write(f"{token.text} - {token.dep_}")
+
+    # Sentiment Analysis using TextBlob
+    sentiment = TextBlob(text)
+    sentiment_score = sentiment.sentiment.polarity
+    st.subheader("Sentiment Analysis")
+
+    # Display the sentiment score
+    st.write(f"Sentiment Score: {sentiment_score}")
+
+    # Categorize the sentiment
+    if sentiment_score > 0:
+        st.write("Sentiment: Positive")
+    elif sentiment_score < 0:
+        st.write("Sentiment: Negative")
+    else:
+        st.write("Sentiment: Neutral")
