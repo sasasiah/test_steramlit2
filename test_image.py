@@ -1,28 +1,47 @@
 import streamlit as st
-import tensorflow as tf
 from PIL import Image
+import tensorflow as tf
+import numpy as np
 
-# Load a pre-trained model
-model = tf.keras.applications.MobileNetV2(weights="imagenet")
+# Load your pre-trained model
+model = tf.keras.models.load_model('your_model.h5')
 
-st.title("Image Classification with Streamlit")
+# Define a function to preprocess the image
+def preprocess_image(image):
+    image = np.array(image)
+    image = tf.image.resize(image, (224, 224))
+    image = tf.keras.applications.mobilenet_v2.preprocess_input(image)
+    return image
 
-uploaded_image = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
+# Define a function for image classification
+def classify_image(image):
+    image = preprocess_image(image)
+    image = np.expand_dims(image, axis=0)
+    predictions = model.predict(image)
+    return predictions
+
+# Streamlit web app layout
+st.title('Image Classification Web App')
+st.write('Upload an image for classification.')
+
+uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
 if uploaded_image is not None:
     image = Image.open(uploaded_image)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption='Uploaded Image', use_column_width=True)
+    st.write("")
 
-    # Preprocess the image
-    image = tf.image.resize(image, (224, 224))
-    image = tf.keras.applications.mobilenet_v2.preprocess_input(image)
-    image = tf.expand_dims(image, axis=0)
+    if st.button('Classify'):
+        with st.spinner('Classifying...'):
+            predictions = classify_image(image)
+            top3 = tf.math.top_k(predictions, k=3)
 
-    # Make predictions
-    predictions = model.predict(image)
-    decoded_predictions = tf.keras.applications.mobilenet_v2.decode_predictions(predictions.numpy())
+            class_names = ['Class1', 'Class2', 'Class3']  # Replace with your actual class names
 
-    st.subheader("Predictions:")
-    for i, (imagenet_id, label, score) in enumerate(decoded_predictions[0]):
-        st.write(f"{i + 1}: {label} ({score:.2f})")
+            st.write("Top 3 Predictions:")
+            for i in range(3):
+                class_id = top3.indices[0][i].numpy()
+                class_name = class_names[class_id]
+                probability = top3.values[0][i].numpy()
+                st.write(f"{class_name} ({probability * 100:.2f}%)")
 
