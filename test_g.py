@@ -1,6 +1,7 @@
 import streamlit as st
-#import plotly.express as px
 import pandas as pd
+#import matplotlib.pyplot as plt
+#import seaborn as sns
 
 # Set a title and a subtitle
 st.title("Custom Chart App")
@@ -11,22 +12,6 @@ chart_type = st.sidebar.selectbox("Select Chart Type", ["Scatter", "Line", "Bar"
 
 # Create a file uploader for CSV files
 uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type=["csv"])
-
-# Define a list of predefined color palettes
-color_palettes = {
-    "Default": px.colors.qualitative.Plotly,
-    "Set1": px.colors.qualitative.Set1,
-    "Set2": px.colors.qualitative.Set2,
-    "Set3": px.colors.qualitative.Set3,
-    "Dark24": px.colors.qualitative.Dark24,
-    "Pastel1": px.colors.qualitative.Pastel1,
-    "Viridis": px.colors.sequential.Viridis,
-    "Blues": px.colors.sequential.Blues,
-    "YlOrRd": px.colors.sequential.YlOrRd,
-}
-
-# Create a selectbox for selecting a color palette
-selected_palette = st.sidebar.selectbox("Select Color Palette", list(color_palettes.keys()))
 
 if uploaded_file is not None:
     # Read the uploaded CSV file into a DataFrame
@@ -41,23 +26,50 @@ if uploaded_file is not None:
 
     # Check for valid columns in the DataFrame
     if x_column != y_column:
-        # Create an interactive chart based on the selected chart type with color differentiation and custom color palette
-        if chart_type == "Scatter":
-            fig = px.scatter(df, x=x_column, y=y_column, color=color_column, title="Custom Scatter Plot", color_discrete_sequence=color_palettes[selected_palette])
-        elif chart_type == "Line":
-            fig = px.line(df, x=x_column, y=y_column, color=color_column, title="Custom Line Chart", color_discrete_sequence=color_palettes[selected_palette])
-        elif chart_type == "Bar":
-            fig = px.bar(df, x=x_column, y=y_column, color=color_column, title="Custom Bar Chart", color_discrete_sequence=color_palettes[selected_palette])
-        elif chart_type == "Pie":
-            fig = px.pie(df, names=x_column, values=y_column, title="Custom Pie Chart", color_discrete_sequence=color_palettes[selected_palette])
-        elif chart_type == "Box":
-            fig = px.box(df, x=x_column, y=y_column, color=color_column, title="Custom Box Plot", color_discrete_sequence=color_palettes[selected_palette])
-        elif chart_type == "Area":
-            fig = px.area(df, x=x_column, y=y_column, color=color_column, title="Custom Area Chart", color_discrete_sequence=color_palettes[selected_palette])
-        elif chart_type == "Histogram":
-            fig = px.histogram(df, x=x_column, y=y_column, color=color_column, title="Custom Histogram", color_discrete_sequence=color_palettes[selected_palette])
+        # Create a custom chart based on the selected chart type
+        plt.figure(figsize=(10, 6))
 
-        # Display the interactive chart
-        st.plotly_chart(fig)
+        if chart_type == "Scatter":
+            if color_column:
+                sns.scatterplot(data=df, x=x_column, y=y_column, hue=color_column)
+            else:
+                sns.scatterplot(data=df, x=x_column, y=y_column)
+            plt.title("Custom Scatter Plot")
+        elif chart_type == "Line":
+            if color_column:
+                sns.lineplot(data=df, x=x_column, y=y_column, hue=color_column)
+            else:
+                sns.lineplot(data=df, x=x_column, y=y_column)
+            plt.title("Custom Line Chart")
+        elif chart_type == "Bar":
+            if color_column:
+                sns.barplot(data=df, x=x_column, y=y_column, hue=color_column)
+            else:
+                sns.barplot(data=df, x=x_column, y=y_column)
+            plt.title("Custom Bar Chart")
+        elif chart_type == "Pie":
+            if color_column:
+                st.warning("Pie chart does not support color differentiation.")
+            else:
+                st.warning("Pie chart does not support color differentiation.")
+        elif chart_type == "Box":
+            if color_column:
+                sns.boxplot(data=df, x=x_column, y=y_column, hue=color_column)
+            else:
+                sns.boxplot(data=df, x=x_column, y=y_column)
+            plt.title("Custom Box Plot")
+        elif chart_type == "Area":
+            if color_column:
+                st.warning("Area chart does not support color differentiation.")
+            else:
+                st.warning("Area chart does not support color differentiation.")
+        elif chart_type == "Histogram":
+            if color_column:
+                sns.histplot(data=df, x=x_column, hue=color_column, element="step")
+            else:
+                sns.histplot(data=df, x=x_column, element="step")
+            plt.title("Custom Histogram")
+
+        st.pyplot(plt)
     else:
         st.warning("X and Y columns should be different.")
