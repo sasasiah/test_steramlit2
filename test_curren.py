@@ -6,11 +6,11 @@ st.title("Currency Converter")
 
 # Define a list of currencies and their symbols (as emojis)
 currencies = {
-    "USD": {"emoji": "💵", "name": "สกุลเงินสหรัฐอเมริกา('$')"},
-    "EUR": {"emoji": "💶", "name": "สกุลเงินยูโร('€')"},
-    "GBP": {"emoji": "💷", "name": "สกุลเงินปอนด์('£')"},
-    "JPY": {"emoji": "💴", "name": "สกุลเงินเยนญี่ปุ่น('¥')"},
-    "AUD": {"emoji": "💰", "name": "สกุลเงินดอลลาร์ออสเตรเลีย('A$')"},
+    "USD": {"emoji": "💵", "name": "$"},
+    "EUR": {"emoji": "💶", "name": "€"},
+    "GBP": {"emoji": "💷", "name": "£"},
+    "JPY": {"emoji": "💴", "name": "¥"},
+    "AUD": {"emoji": "💰", "name": "A$"},
 }
 
 # User input: amount and source currency
