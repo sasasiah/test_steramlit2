@@ -66,7 +66,6 @@ st.markdown(
     """
     <style>
     .stTextInput {background-color: #F4F4F4;}
-    .stButton {background-color: #1E90FF; color: white;}
     </style>
     """,
     unsafe_allow_html=True
@@ -77,7 +76,7 @@ st.markdown(
     """
     <style>
     body {
-    background-image: url('https://example.com/background-image.jpg');
+    background-image: url('https://img.freepik.com/free-vector/background-realistic-abstract-technology-particle_23-2148431735.jpg?w=1380&t=st=1697787693~exp=1697788293~hmac=06a814fa711cf9cf3ab605f6333030fe3c670ecf0aedbb27424968b93daf1c9e');
     background-size: cover;
     }
     </style>
