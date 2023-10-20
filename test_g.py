@@ -23,8 +23,7 @@ if uploaded_file is not None:
     y_column = st.selectbox("Select Y-axis data", options=data.columns)
     animation_column = st.selectbox("Select Animation data", options=data.columns)
 
-    animated_line_chart = px.line(data, x=x_column, y=y_column, animation_frame=animation_column,
-                                  title="Animated 2D Line Chart")
+    #animated_line_chart = px.line(data, x=x_column, y=y_column, animation_frame=animation_column,title="Animated 2D Line Chart")
     st.plotly_chart(animated_line_chart)
 
 # You can add more features and components to your Streamlit app here
