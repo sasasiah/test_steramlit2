@@ -7,6 +7,31 @@ st.title("Weather App")
 # User input: city name
 city_name = st.text_input("Enter a city name:")
 
+# Custom CSS styles for text input and button
+st.markdown(
+    """
+    <style>
+    .stTextInput {background-color: #F4F4F4; border: 2px solid #1E90FF; color: #333;}
+    .stButton {background-color: #1E90FF; color: white; border: none;}
+    .stButton:hover {background-color: #1669b2;}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Custom background image
+st.markdown(
+    """
+    <style>
+    body {
+    background-image: url('https://cdn.pixabay.com/photo/2016/10/25/14/03/clouds-1768967_1280.jpg');
+    background-size: cover;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Define a function to fetch weather data from the OpenWeatherMap API
 def get_weather(city_name):
     try:
@@ -44,3 +69,4 @@ if st.button("Get Weather"):
         st.write(f"Humidity: {weather_data['humidity']}%")
     else:
         st.warning("Weather data not available for the specified city. Please check the city name or try again later.")
+
