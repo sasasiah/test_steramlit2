@@ -20,11 +20,13 @@ def get_weather(city_name):
         if response.status_code == 200:
             # Extract and format weather information
             weather_description = data["weather"][0]["description"]
+            icon = data["weather"][0]["icon"]
             temperature = data["main"]["temp"]
             humidity = data["main"]["humidity"]
 
             return {
                 "description": weather_description,
+                "icon": icon,
                 "temperature": temperature - 273.15,  # Convert from Kelvin to Celsius
                 "humidity": humidity,
             }
@@ -33,14 +35,17 @@ def get_weather(city_name):
     except Exception as e:
         return None
 
-# Define weather icons
+# Define weather icons mapping
 weather_icons = {
-    "Clear": "☀️",
-    "Clouds": "☁️",
-    "Rain": "🌧️",
-    "Snow": "❄️",
-    "Thunderstorm": "⛈️",
-    "Mist": "🌫️"
+    "clear sky": "☀️",
+    "few clouds": "🌤️",
+    "scattered clouds": "🌥️",
+    "broken clouds": "☁️",
+    "shower rain": "🌦️",
+    "rain": "🌧️",
+    "thunderstorm": "⛈️",
+    "snow": "❄️",
+    "mist": "🌫️"
 }
 
 # Display weather information
@@ -49,9 +54,8 @@ if st.button("Get Weather"):
 
     if weather_data is not None:
         st.subheader(f"Weather in {city_name}:")
-        st.write(f"**Description:** {weather_icons.get(weather_data['description'], weather_data['description'])}")
+        st.write(f"**Description:** {weather_data['description']} {weather_icons.get(weather_data['description'], '')}")
         st.write(f"**Temperature:** **{weather_data['temperature']:.2f}°C**")
         st.write(f"**Humidity:** **{weather_data['humidity']}%**")
     else:
         st.warning("Weather data not available for the specified city. Please check the city name or try again later.")
-
