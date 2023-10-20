@@ -1,47 +1,64 @@
 import streamlit as st
-from PIL import Image
-import tensorflow as tf
 import numpy as np
+from PIL import Image
+import cv2
+import matplotlib.pyplot as plt
 
-# Load your pre-trained model
-model = tf.keras.models.load_model('your_model.h5')
+# Title of the web app
+st.title("Advanced Image Processing App")
 
-# Define a function to preprocess the image
-def preprocess_image(image):
-    image = np.array(image)
-    image = tf.image.resize(image, (224, 224))
-    image = tf.keras.applications.mobilenet_v2.preprocess_input(image)
-    return image
-
-# Define a function for image classification
-def classify_image(image):
-    image = preprocess_image(image)
-    image = np.expand_dims(image, axis=0)
-    predictions = model.predict(image)
-    return predictions
-
-# Streamlit web app layout
-st.title('Image Classification Web App')
-st.write('Upload an image for classification.')
-
-uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+# Upload an image
+uploaded_image = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
 
 if uploaded_image is not None:
+    # Display the image
+    st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+
+    # Process the image
     image = Image.open(uploaded_image)
-    st.image(image, caption='Uploaded Image', use_column_width=True)
-    st.write("")
+    image_array = np.array(image)
 
-    if st.button('Classify'):
-        with st.spinner('Classifying...'):
-            predictions = classify_image(image)
-            top3 = tf.math.top_k(predictions, k=3)
+    # Display image info
+    st.write("Image Info:")
+    st.write(f"Format: {image.format}")
+    st.write(f"Size: {image.size[0]}x{image.size[1]} pixels")
+    st.write(f"Mode: {image.mode}")
 
-            class_names = ['Class1', 'Class2', 'Class3']  # Replace with your actual class names
+    # Perform image processing
+    st.subheader("Image Processing")
+    process_type = st.selectbox("Select an Image Processing Task", ["None", "Grayscale", "Invert", "Blur"])
 
-            st.write("Top 3 Predictions:")
-            for i in range(3):
-                class_id = top3.indices[0][i].numpy()
-                class_name = class_names[class_id]
-                probability = top3.values[0][i].numpy()
-                st.write(f"{class_name} ({probability * 100:.2f}%)")
+    if process_type == "Grayscale":
+        grayscale_image = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY)
+        st.image(grayscale_image, caption="Grayscale Image", use_column_width=True)
+
+    elif process_type == "Invert":
+        inverted_image = cv2.bitwise_not(image_array)
+        st.image(inverted_image, caption="Inverted Image", use_column_width=True)
+
+    elif process_type == "Blur":
+        blur_type = st.selectbox("Select a Blur Type", ["Average", "Gaussian"])
+        ksize = st.slider("Select Kernel Size", 1, 31, 3)
+        if blur_type == "Average":
+            blurred_image = cv2.blur(image_array, (ksize, ksize))
+        else:
+            blurred_image = cv2.GaussianBlur(image_array, (ksize, ksize), 0)
+        st.image(blurred_image, caption=f"{blur_type} Blurred Image", use_column_width=True)
+
+    # Display histograms
+    st.subheader("Image Histograms")
+    colors = ("Red", "Green", "Blue")
+    hist_type = st.selectbox("Select a Histogram", colors)
+    
+    if hist_type:
+        channel = colors.index(hist_type)
+        hist = cv2.calcHist([image_array], [channel], None, [256], [0, 256])
+        plt.figure(figsize=(6, 3))
+        plt.title(f"{hist_type} Histogram")
+        plt.xlabel("Pixel Value")
+        plt.ylabel("Frequency")
+        plt.plot(hist, color=hist_type.lower())
+        st.pyplot(plt)
+
+# Run the app with the 'streamlit run' command in your terminal
 
