@@ -8,5 +8,6 @@ requests==2.26.0
 transformers==4.9.2
 textblob==0.15.3
 nltk==3.6.5
+vaderSentiment==3.3.2
 
 
