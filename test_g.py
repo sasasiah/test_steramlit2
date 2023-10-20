@@ -14,7 +14,6 @@ chart_type = st.sidebar.selectbox("Select Chart Type", ["Scatter", "Line", "Bar"
 uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type=["csv"])
 
 if uploaded_file is not None:
-    # Read the uploaded CSV file into a DataFrame
     df = pd.read_csv(uploaded_file)
 
     # Allow users to select X and Y columns
