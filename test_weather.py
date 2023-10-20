@@ -20,13 +20,11 @@ def get_weather(city_name):
         if response.status_code == 200:
             # Extract and format weather information
             weather_description = data["weather"][0]["description"]
-            icon = data["weather"][0]["icon"]
             temperature = data["main"]["temp"]
             humidity = data["main"]["humidity"]
 
             return {
                 "description": weather_description,
-                "icon": icon,
                 "temperature": temperature - 273.15,  # Convert from Kelvin to Celsius
                 "humidity": humidity,
             }
@@ -47,6 +45,7 @@ weather_icons = {
     "snow": "❄️",
     "mist": "🌫️"
 }
+
 # Display weather information with larger font
 if st.button("Get Weather"):
     weather_data = get_weather(city_name)
@@ -62,11 +61,3 @@ if st.button("Get Weather"):
         st.write(f"**<h2>Humidity:</h2>** **{weather_data['humidity']}%**")
     else:
         st.warning("Weather data not available for the specified city. Please check the city name or try again later.")
-
-
-
-
-
-
-
-
