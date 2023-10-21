@@ -3,8 +3,8 @@ import plotly.express as px
 import pandas as pd
 
 # Set a title and a subtitle
-st.title("Custom Chart App")
-st.subheader("Create a custom chart with user-provided data")
+st.title("Custom Chart")
+st.subheader("Create a custom chart")
 
 # Create a sidebar with user input for chart type
 chart_type = st.sidebar.selectbox("Select Chart Type", ["Scatter", "Line", "Bar", "Pie", "Box", "Area", "Histogram"])
